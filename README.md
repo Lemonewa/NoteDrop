@@ -1,5 +1,9 @@
 # Spadające klawisze
 
-Celem pracy jest zaprojektowanie i zaimplementowanie aplikacji webowej służącej do automatycznej konwersji zapisu nutowego na animację typu „spadające klawisze”. Narzędzie umożliwi użytkownikom generowanie filmów edukacyjnych, wspomagających naukę gry na pianinie, bez konieczności biegłego czytania nut. System będzie przetwarzał przesłany plik w formacie MIDI albo MusicXML, generował ścieżkę dźwiękową w formacie WAV oraz renderował klatki wideo zsynchronizowane z muzyką.
+Celem pracy jest zaprojektowanie i zaimplementowanie aplikacji webowej służącej do automatycznej konwersji zapisu nutowego na animację typu „**spadające klawisze**”.
+
+Narzędzie umożliwi użytkownikom generowanie filmów edukacyjnych, wspomagających naukę gry na pianinie, bez konieczności biegłego czytania nut. System będzie przetwarzał przesłany plik w formacie MIDI albo MusicXML, generował ścieżkę dźwiękową w formacie WAV oraz renderował klatki wideo zsynchronizowane z muzyką.
+
 W odróżnieniu od istniejących rozwiązań desktopowych, aplikacja będzie dostępna z poziomu przeglądarki. Ponadto zaoferuje personalizację warstwy wizualnej, uwględniającą przynajmniej dobór kolorystyki, a także uwględni rozróżnienie partii lewej i prawej ręki.
+
 Implementacja części serwerowej oraz logiki przetwarzania plików zostanie wykonana w języku Python (z wykorzystaniem frameworka FastAPI lub Flask oraz bibliotek pretty_midi i FFmpeg), natomiast interfejs użytkownika zostanie zbudowany przy użyciu biblioteki React.
