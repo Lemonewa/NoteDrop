@@ -1,6 +1,6 @@
 # Spadające klawisze
 
-Celem pracy jest zaprojektowanie i zaimplementowanie aplikacji webowej służącej do automatycznej konwersji zapisu nutowego na animację typu „**spadające klawisze**”.
+Celem pracy jest zaprojektowanie i zaimplementowanie strony internetowej służącej do automatycznej konwersji zapisu nutowego na animację typu „**spadające klawisze**”.
 
 Narzędzie umożliwi użytkownikom generowanie filmów edukacyjnych, wspomagających naukę gry na pianinie, bez konieczności biegłego czytania nut. System będzie przetwarzał przesłany plik w formacie MIDI albo MusicXML, generował ścieżkę dźwiękową w formacie WAV oraz renderował klatki wideo zsynchronizowane z muzyką.
 
