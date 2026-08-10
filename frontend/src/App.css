@@ -10,8 +10,47 @@ main {
 .tutorial {
   flex: 2;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
   background: #f2f2f2;
+}
+
+.tutorial_title {
+  text-align: center;
+}
+
+.tutorial_content {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+}
+
+.tutorial_part {
+  flex: 1;
+  min-width: 0;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-wrap: break-word;
+}
+
+.tutorial_part h2 {
+  text-align: center;
+}
+
+.tutorial_part ol {
+  padding-left: 0;
+  list-style-position: inside;
+}
+
+.tutorial_part p,
+.tutorial_part li {
+  line-height: 1.5;
+  text-align: justify;
+}
+
+.tutorial_part li {
+  margin-bottom: 8px;
 }
 
 .help {
@@ -20,12 +59,33 @@ main {
   left: 0;
 }
 
+.view-3 .tutorial {
+  flex: 1;
+}
+
+.view-3 .tutorial_content {
+  flex-direction: column;
+  overflow-y: auto;
+}
+
+.view-3 .tutorial_part {
+  padding: 12px 16px;
+}
+
 .central-a {
   flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.view-2 .personalization {
+  flex: 2;
+}
+
+.view-3 .personalization {
+  flex: 1;
 }
 
 .input_file {
@@ -47,4 +107,13 @@ main {
 
 .attach_a_file:active {
   background: #dcdcdc;
+}
+
+.personalization {
+  background: #f8f8f8;
+}
+
+.preview {
+  height: 33.33%;
+  background: #dedede;
 }
