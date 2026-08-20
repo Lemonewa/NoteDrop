@@ -1,0 +1,21 @@
+STRONA WIZUALNA
+Serwer będzie utrzymany w stylu minimalistycznym. Neutralne kolory, minimum przycisków i komunikatów. Są cztery widoki, które może przyjmować serwer:
+1) "WIDOK 0"
+Na środku ekranu znajduje się przycisk z napisem "ATTACH A FILE" oraz napis bezpośrednio pod nim - "NO FILE SELECTED". W lewym górnym rogu znajduje się napis "HELP". Niech komponent, który razem tworzą nazywa się "CENTRAL A".
+2) "WIDOK 1"
+Lewe dwie trzecie ekranu wypełnia panel "Instrukcja Obsługi", a prawą jedną trzecią wypełnia komponent "CENTRAL A". Jest on odpowiednio przeskalowany.
+3) "WIDOK 2"
+Prawe dwie trzecie ekranu wypełnia panel "Personalizacja". Górna jedna trzecia panelu "Personalizacja" to podgląd. Pod nim znajdują się sekcje: "COLOR L", "COLOR R", "TILES", "BACKGROUND", "EFFECTS". Sekcja składa się z tytułu sekcji oraz okienka, którego kliknięcie otwiera panel danej sekcji, w którym można dokonać wyboru. Wybory wizualizują się na podglądzie w czasie rzeczywistym. Lewa jedna trzecia ekranu to lekko zmodyfikowany "CENTRAL A". Zamiast przycisku "ATTACH A FILE" jest przycisk "CHANGE FILE". Zamiast napisu "NO FILE SELECTED" widnieje "[nazwa].[format]" (wynikające z załączonego pliku). Taki komponent nazwiemy "CENTRAL B". "CENTRAL B" ma się odpowiednio przeskalować do lewej.
+4) "WIDOK 3"
+Lewa jedna trzecia ekranu jest wypełniona panelem "Instrukcja Obsługi". Środkowa jedna trzecia ekranu jest wypełniona komponentem "CENTRAL B". Prawa jedna trzecia ekranu jest wypełniona panelem "Personalizacja". Wszystkie trzy części mają się odpowiednio przeskalować.
+
+STRONA UŻYTKOWA
+1) "WIDOK 0" jest widokiem startowym. W takim stanie użytkownik zastaje stronę.
+2) "WIDOK 1" pojawia się w momencie, gdy użytkownik jeszcze nie załączył pliku, ale kliknął "HELP". Ponowne kliknięcie "HELP" przywraca "WIDOK 0".
+3) "WIDOK 2" pojawia się w momencie, gdy użytkownik już załączył plik, ale nie kliknął "HELP" (kliknął parzyście wiele razy). Istnieje możliwość przywrócenia "WIDOK 0" z "WIDOK 2", jednak dzieje się to wyłącznie w drodze wyjątku (patrz niżej).
+4) "WIDOK 3" pojawia się w momencie, gdy użytkownik już załączył plik i kliknął "HELP" (nieparzyście wiele razy). Kliknięcie "HELP" przywraca "WIDOK 2". Istnieje możliwość przywrócenia "WIDOK 1" z "WIDOK 3", jednak dzieje się to wyłącznie w drodze wyjątku (patrz niżej).
+
+WYJĄTKI
+1) "ZŁY FORMAT PLIKU"
+W chwili, gdy użytkownik spróbuje załączyć plik w formacie innym niż dozwolone (MIDI, MUSICXML), powinien wyskoczyć komunikat "WRONG FILE FORMAT - ATTACH A .MIDI FILE OR A .MUSICXML FILE". Jeśli do tej pory załączony był plik w dobrym formacie, to po takiej nieudanej próbie nie powinien być załączony żaden. Widok powinien wrócić do "WIDOK 0", jeśli był w "WIDOK 2" oraz do "WIDOK 1", jeśli był w "WIDOK 3".
+
