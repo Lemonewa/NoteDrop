@@ -9,7 +9,8 @@ export const Default_Gradient_Top_Color = '#e53935'
 export const Default_Gradient_Bottom_Color = '#fdd835'
 export const Default_Line_Color = '#ffffff'
 export const Default_Line_Thickness = 0.25
-export const Default_Preview_Duration = 10
+export const Default_Tempo = 1
+export const Default_Duration = 10
 
 export const Basic_Note_Colors = [
   '#ff4fb3',
@@ -26,6 +27,7 @@ export const Basic_Background_Colors = ['#d9d9d9', '#444444', '#f2e8cf', '#0b1f4
 export const Basic_Line_Colors = ['#ffffff', '#000000']
 
 export const Preview_Line_Thickness_Options = [0.125, 0.25, 0.5, 1]
+export const Preview_Tempo_Options = [0.25, 0.5, 0.75, 1, 1.25, 1.5]
 export const Preview_Duration_Options = [10, 20, 30]
 
 export function Dark_Color(Color: string) {

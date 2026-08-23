@@ -9,8 +9,7 @@ export const Preview_Pixels_Per_Second = Preview_Hit_Height / Preview_Fall_Time
 
 export function Key_Color(Pitch: number) {
   Pitch = Pitch % 12
-  if (Pitch === 1 || Pitch === 3 || Pitch === 6 || Pitch === 8 || Pitch === 10)
-  {
+  if (Pitch === 1 || Pitch === 3 || Pitch === 6 || Pitch === 8 || Pitch === 10) {
     return 1
   }
   return 0
@@ -20,12 +19,10 @@ export const Preview_White_Key_Pitches: number[] = []
 export const Preview_Black_Key_Pitches: number[] = []
 
 for (let iter = Preview_Min_Pitch; iter <= Preview_Max_Pitch; iter += 1) {
-  if (Key_Color(iter))
-  {
+  if (Key_Color(iter)) {
     Preview_Black_Key_Pitches.push(iter)
   }
-  else
-  {
+  else {
     Preview_White_Key_Pitches.push(iter)
   }
 }
@@ -49,7 +46,7 @@ function White_Key_Index(Pitch: number) {
 
 export function Note_Position(Pitch: number) {
   if (Key_Color(Pitch)) {
-    return White_Key_Index(Pitch) * Preview_White_Key_Width - Preview_Black_Key_Width / 2
+    return (White_Key_Index(Pitch) * Preview_White_Key_Width) - (Preview_Black_Key_Width / 2)
   }
   return White_Key_Index(Pitch) * Preview_White_Key_Width
 }

@@ -7,7 +7,7 @@ main {
   display: flex;
 }
 
-.tutorial {
+.Tutorial {
   flex: 2;
   display: flex;
   flex-direction: column;
@@ -16,17 +16,17 @@ main {
   background: #f2f2f2;
 }
 
-.tutorial_title {
+.Tutorial_Title {
   text-align: center;
 }
 
-.tutorial_content {
+.Tutorial_Content {
   flex: 1;
   display: flex;
   min-height: 0;
 }
 
-.tutorial_part {
+.Tutorial_Part {
   flex: 1;
   min-width: 0;
   padding: 24px;
@@ -34,45 +34,56 @@ main {
   overflow-wrap: break-word;
 }
 
-.tutorial_part h2 {
+.Tutorial_Part h2 {
   text-align: center;
 }
 
-.tutorial_part ol {
+.Tutorial_Part ol {
   padding-left: 0;
   list-style-position: inside;
 }
 
-.tutorial_part p,
-.tutorial_part li {
+.Tutorial_Part p,
+.Tutorial_Part li {
   line-height: 1.5;
   text-align: justify;
 }
 
-.tutorial_part li {
+.Tutorial_Part li {
   margin-bottom: 8px;
 }
 
-.help {
+.Help {
   position: absolute;
   top: 0;
   left: 0;
 }
 
-.view-3 .tutorial {
+.Error_Message {
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 14px;
+  border: 1px solid #8a1f1f;
+  background: #f8dddd;
+  color: #621414;
+}
+
+.View-3 .Tutorial {
   flex: 1;
 }
 
-.view-3 .tutorial_content {
+.View-3 .Tutorial_Content {
   flex-direction: column;
   overflow-y: auto;
 }
 
-.view-3 .tutorial_part {
+.View-3 .Tutorial_Part {
   padding: 12px 16px;
 }
 
-.central-a {
+.Central-A {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -80,19 +91,19 @@ main {
   align-items: center;
 }
 
-.view-2 .personalization {
+.View-2 .Personalization {
   flex: 2;
 }
 
-.view-3 .personalization {
+.View-3 .Personalization {
   flex: 1;
 }
 
-.input_file {
+.Input_File {
   display: none;
 }
 
-.attach_a_file {
+.Attach_A_File {
   padding: 2px 6px;
   border: 0.5px solid buttonborder;
   background: buttonface;
@@ -101,19 +112,150 @@ main {
   user-select: none;
 }
 
-.attach_a_file:hover {
+.Attach_A_File:hover {
   background: #e5e5e5;
 }
 
-.attach_a_file:active {
+.Attach_A_File:active {
   background: #dcdcdc;
 }
 
-.personalization {
+.Personalization {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   background: #f8f8f8;
 }
 
-.preview {
-  height: 33.33%;
+.Preview {
+  position: relative;
+  flex: 0 0 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   background: #dedede;
+}
+
+.Preview_Svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.Preview_Background {
+  pointer-events: none;
+}
+
+.Preview_Hit_Line {
+  stroke: #333333;
+  stroke-width: 2;
+}
+
+.Preview_Key_White {
+  stroke: #9a9a9a;
+  stroke-width: 0.6;
+}
+
+.Preview_Key_Black {
+  stroke: #000000;
+  stroke-width: 0.2;
+}
+
+.Preview_Info {
+  z-index: 1;
+  position: absolute;
+  padding: 8px 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.Preview_Note {
+  opacity: 0.9;
+}
+
+.Color_Panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 0;
+  padding: 18px;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.Color_Row {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.Color_Title {
+  font-size: 12px;
+}
+
+.Color_Boxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-width: 0;
+}
+
+.Color_Box {
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  border: 1px solid #777777;
+  cursor: pointer;
+}
+
+.Color_Custom {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.Color_Input {
+  width: 34px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid #777777;
+  background: transparent;
+  cursor: pointer;
+}
+
+.Auto_Color_Inactive {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid #777777;
+  background: #eeeeee;
+  color: #222222;
+  cursor: pointer;
+}
+
+.Auto_Color_Active {
+  height: 26px;
+  padding: 0 8px;
+  border: 1px solid #777777;
+  background: #d7e8f7;
+  color: #222222;
+  cursor: pointer;
+}
+
+.Select_Input {
+  min-width: 180px;
+  height: 28px;
+  padding: 0 8px;
+  border: 1px solid #777777;
+  background: #ffffff;
+}
+
+.Line_Thickness {
+  height: 26px;
+  border: 1px solid #777777;
+  background: #ffffff;
 }
