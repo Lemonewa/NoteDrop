@@ -18,4 +18,8 @@ STRONA UŻYTKOWA
 WYJĄTKI
 1) "ZŁY FORMAT PLIKU"
 W chwili, gdy użytkownik spróbuje załączyć plik w formacie innym niż dozwolone (MIDI, MUSICXML), powinien wyskoczyć komunikat "WRONG FILE FORMAT - ATTACH A .MIDI FILE OR A .MUSICXML FILE". Jeśli do tej pory załączony był plik w dobrym formacie, to po takiej nieudanej próbie nie powinien być załączony żaden. Widok powinien wrócić do "WIDOK 0", jeśli był w "WIDOK 2" oraz do "WIDOK 1", jeśli był w "WIDOK 3".
+2) "PUSTY PLIK"
+Jak parser wykryje pusty plik to powinien wyskoczyć komunikat "EMPTY FILE" i również powinno nastąpić usunięcie tegoż pliku wraz z cofnięciem widoku.
 
+RENDEROWANIE
+Przychodzi taki moment, kiedy użytkownik jest gotowy na pobranie wideo. W tym celu uznałam za stosowne dodanie przycisku "DOWNLOAD", nad informacjami o wybranym pliku. Może warto rozważyć inny pipeline - najpierw użytkownik klika "ACCEPT" na dole Panelu Personalizacji, wtedy panel się zamyka i wtedy jeszcze trzeba kliknąć DOWNLOAD. A może ACCEPT zastąpiłoby DOWNLOAD - różnica jest w lokalizacji tego przycisku. Mimo wszystko skłaniam się do opcji obecnej - DOWNLOAD poza panelem, po jego naciśnięciu możliwość edycji personalizacji znika. W tutorialu trzeba wyraźnie zaznaczyć, że DOWNLOAD zapisuje aktualny stan podglądu. Druga kwestia - czy użytkownik może dać CANCEL po zaczęciu renderowania? Pewnie tak, wtedy edycja podglądu by wracała - w takim stanie w jakim była przed naciśnięciem DOWNLOAD.

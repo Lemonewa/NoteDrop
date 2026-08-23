@@ -136,6 +136,7 @@ function App() {
   const [Tempo, Set_Tempo] = useState(VS.Default_Tempo)
   const [Duration, Set_Duration] = useState(VS.Default_Duration)
   const [Error_Message, Set_Error_Message] = useState('')
+  const [Rendering, Set_Rendering] = useState(false)
   
   const Error_Timeout = useRef<number | undefined>(undefined)
   const Frame = useRef<number | undefined>(undefined)
@@ -287,6 +288,44 @@ function App() {
     Set_Notes(Data.Notes)
     Set_File_Name(File.name)
     Set_Error_Message('')
+    Set_Rendering(false)
+
+  }
+
+  async function Render() {
+
+    Set_Rendering(true)
+    const Render_Data = {
+      File_Name: File_Name,
+      Notes: Notes,
+      Left_White_Note_Color: Left_White_Note_Color,
+      Left_Black_Note_Color: Left_Black_Note_Color,
+      Right_White_Note_Color: Right_White_Note_Color,
+      Right_Black_Note_Color: Right_Black_Note_Color,
+      White_Key_Color: White_Key_Color,
+      Black_Key_Color: Black_Key_Color,
+      Background_Type: Background_Type,
+      Solid_Color: Solid_Color,
+      Gradient_Top_Color: Gradient_Top_Color,
+      Gradient_Bottom_Color: Gradient_Bottom_Color,
+      Stripes_Color: Stripes_Color,
+      Vertical_Line_Color: Vertical_Line_Color,
+      Horizontal_Line_Color: Horizontal_Line_Color,
+      Vertical_Line_Thickness: Vertical_Line_Thickness,
+      Horizontal_Line_Thickness: Horizontal_Line_Thickness,
+      Tempo: Tempo,
+      Duration: Duration
+    }
+
+    const Response = await fetch('/render', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(Render_Data)
+    })
+    if (!Response.ok) {
+      const Data = await Response.json()
+      Show_Error(Data.detail || `Render Failed (${Response.status})`)
+    }
 
   }
 
@@ -434,7 +473,7 @@ function App() {
   return (
     <main className={View}>
       <button className="Help" onClick={() => Set_Help(!Help)}>HELP</button>
-      {Error_Message !== '' && (
+      {(Error_Message !== '') && (
         <div className="Error_Message">{Error_Message}</div>
       )}
       {Help && (
@@ -492,14 +531,19 @@ function App() {
           type="file"
           onChange={Upload_File}
         />
+        {(File_Name !== '') && (
+          <button className="Download_File" type="button" onClick={Render} disabled={Rendering}>
+            DOWNLOAD FILE
+          </button>
+        )}
         <label className="Attach_A_File" htmlFor="Input_File">
-          {File_Name === '' ? 'ATTACH A FILE' : 'CHANGE FILE'}
+          {(File_Name === '') ? 'ATTACH A FILE' : 'CHANGE FILE'}
         </label>
         <div>
-          {File_Name === '' ? 'NO FILE SELECTED' : File_Name}
+          {(File_Name === '') ? 'NO FILE SELECTED' : File_Name}
         </div>
       </div>
-      {File_Name !== '' && (
+      {(File_Name !== '') && (
         <section className="Personalization">
           <div className="Preview">
             <svg
@@ -523,56 +567,66 @@ function App() {
             </svg>
           </div>
           <section className="Color_Panel">
-            {Basic_Color_Row('LEFT WHITE', VS.Basic_Note_Colors, Left_White_Note_Color, Change_Left_White_Note_Color)}
-            {Auto_Color_Row('LEFT BLACK', Left_Black_Note_Color, Left_Black_Note_Color_Auto, Change_Left_Black_Note_Color, Auto_Left_Black_Note_Color)}
-            {Basic_Color_Row('RIGHT WHITE', VS.Basic_Note_Colors, Right_White_Note_Color, Change_Right_White_Note_Color)}
-            {Auto_Color_Row('RIGHT BLACK', Right_Black_Note_Color, Right_Black_Note_Color_Auto, Change_Right_Black_Note_Color, Auto_Right_Black_Note_Color)}
-            {Basic_Color_Row('WHITE KEYS', VS.Basic_White_Key_Colors, White_Key_Color, Set_White_Key_Color)}
-            {Basic_Color_Row('BLACK KEYS', VS.Basic_Black_Key_Colors, Black_Key_Color, Set_Black_Key_Color)}
-            <div className="Color_Row">
-              <div className="Color_Title">BACKGROUND</div>
-              <select
-                className="Select_Input"
-                value={Background_Type}
-                onChange={(Input) => Set_Background_Type(Input.target.value as VS.Background_Type)}
-              >
-                <option value="Solid">SOLID</option>
-                <option value="Gradient">GRADIENT</option>
-                <option value="Vertical_Stripes">VERTICAL STRIPES</option>
-                <option value="Horizontal_Stripes">HORIZONTAL STRIPES</option>
-                <option value="Grid">GRID</option>
-              </select>
-            </div>
-            {Background_Type === 'Solid' && Basic_Color_Row('BACKGROUND COLOR', VS.Basic_Background_Colors, Solid_Color, Set_Solid_Color)}
-            {Background_Type === 'Gradient' && (
+            {Rendering && (
+              <div className="Rendering_Message">
+                <div>Rendering...</div>
+                <div>Process may take a few minutes.</div>
+              </div>
+            )}
+            {(!Rendering) && (
               <>
-                {Basic_Color_Row('GRADIENT TOP', VS.Basic_Note_Colors, Gradient_Top_Color, Set_Gradient_Top_Color)}
-                {Basic_Color_Row('GRADIENT BOTTOM', VS.Basic_Note_Colors, Gradient_Bottom_Color, Set_Gradient_Bottom_Color)}
+                {Basic_Color_Row('LEFT WHITE', VS.Basic_Note_Colors, Left_White_Note_Color, Change_Left_White_Note_Color)}
+                {Auto_Color_Row('LEFT BLACK', Left_Black_Note_Color, Left_Black_Note_Color_Auto, Change_Left_Black_Note_Color, Auto_Left_Black_Note_Color)}
+                {Basic_Color_Row('RIGHT WHITE', VS.Basic_Note_Colors, Right_White_Note_Color, Change_Right_White_Note_Color)}
+                {Auto_Color_Row('RIGHT BLACK', Right_Black_Note_Color, Right_Black_Note_Color_Auto, Change_Right_Black_Note_Color, Auto_Right_Black_Note_Color)}
+                {Basic_Color_Row('WHITE KEYS', VS.Basic_White_Key_Colors, White_Key_Color, Set_White_Key_Color)}
+                {Basic_Color_Row('BLACK KEYS', VS.Basic_Black_Key_Colors, Black_Key_Color, Set_Black_Key_Color)}
+                <div className="Color_Row">
+                  <div className="Color_Title">BACKGROUND</div>
+                  <select
+                    className="Select_Input"
+                    value={Background_Type}
+                    onChange={(Input) => Set_Background_Type(Input.target.value as VS.Background_Type)}
+                  >
+                    <option value="Solid">SOLID</option>
+                    <option value="Gradient">GRADIENT</option>
+                    <option value="Vertical_Stripes">VERTICAL STRIPES</option>
+                    <option value="Horizontal_Stripes">HORIZONTAL STRIPES</option>
+                    <option value="Grid">GRID</option>
+                  </select>
+                </div>
+                {(Background_Type === 'Solid') && Basic_Color_Row('BACKGROUND COLOR', VS.Basic_Background_Colors, Solid_Color, Set_Solid_Color)}
+                {(Background_Type === 'Gradient') && (
+                  <>
+                    {Basic_Color_Row('GRADIENT TOP', VS.Basic_Note_Colors, Gradient_Top_Color, Set_Gradient_Top_Color)}
+                    {Basic_Color_Row('GRADIENT BOTTOM', VS.Basic_Note_Colors, Gradient_Bottom_Color, Set_Gradient_Bottom_Color)}
+                  </>
+                )}
+                {((Background_Type === 'Vertical_Stripes') || (Background_Type === 'Horizontal_Stripes') || (Background_Type === 'Grid')) && Basic_Color_Row('BACKGROUND COLOR', VS.Basic_Background_Colors, Stripes_Color, Set_Stripes_Color)}
+                {((Background_Type === 'Vertical_Stripes') || (Background_Type === 'Grid')) && Line_Row('VERTICAL LINE', Vertical_Line_Thickness, Vertical_Line_Color, Set_Vertical_Line_Thickness, Set_Vertical_Line_Color)}
+                {((Background_Type === 'Horizontal_Stripes') || (Background_Type === 'Grid')) && Line_Row('HORIZONTAL LINE', Horizontal_Line_Thickness, Horizontal_Line_Color, Set_Horizontal_Line_Thickness, Set_Horizontal_Line_Color)}
+                <div className="Color_Row">
+                  <div className="Color_Title">TEMPO</div>
+                  <select
+                    className="Select_Input"
+                    value={Tempo}
+                    onChange={(Input) => Set_Tempo(Number(Input.target.value))}
+                  >
+                    {Tempo_Options}
+                  </select>
+                </div>
+                <div className="Color_Row">
+                  <div className="Color_Title">PREVIEW</div>
+                  <select
+                    className="Select_Input"
+                    value={Duration}
+                    onChange={(Input) => Set_Duration(Number(Input.target.value))}
+                  >
+                    {Duration_Options}
+                  </select>
+                </div>
               </>
             )}
-            {(Background_Type === 'Vertical_Stripes' || Background_Type === 'Horizontal_Stripes' || Background_Type === 'Grid') && Basic_Color_Row('BACKGROUND COLOR', VS.Basic_Background_Colors, Stripes_Color, Set_Stripes_Color)}
-            {(Background_Type === 'Vertical_Stripes' || Background_Type === 'Grid') && Line_Row('VERTICAL LINE', Vertical_Line_Thickness, Vertical_Line_Color, Set_Vertical_Line_Thickness, Set_Vertical_Line_Color)}
-            {(Background_Type === 'Horizontal_Stripes' || Background_Type === 'Grid') && Line_Row('HORIZONTAL LINE', Horizontal_Line_Thickness, Horizontal_Line_Color, Set_Horizontal_Line_Thickness, Set_Horizontal_Line_Color)}
-            <div className="Color_Row">
-              <div className="Color_Title">TEMPO</div>
-              <select
-                className="Select_Input"
-                value={Tempo}
-                onChange={(Input) => Set_Tempo(Number(Input.target.value))}
-              >
-                {Tempo_Options}
-              </select>
-            </div>
-            <div className="Color_Row">
-              <div className="Color_Title">PREVIEW</div>
-              <select
-                className="Select_Input"
-                value={Duration}
-                onChange={(Input) => Set_Duration(Number(Input.target.value))}
-              >
-                {Duration_Options}
-              </select>
-            </div>
           </section>
         </section>
       )}

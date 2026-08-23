@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile, Body
 from .Midi_Notes import Midi_Parser
 
 App = FastAPI()
@@ -7,7 +7,6 @@ App = FastAPI()
 async def Read_Midi(Input: UploadFile = File(..., alias="file")):
 
     File_Name = Input.filename or ""
-
     if not File_Name.lower().endswith((".mid", ".midi")):
         raise HTTPException(status_code=400, detail="Wrong File Format")
 
@@ -19,3 +18,7 @@ async def Read_Midi(Input: UploadFile = File(..., alias="file")):
         raise HTTPException(status_code=400, detail="Invalid MIDI File") from Error
 
     return {"Notes": Notes}
+
+@App.post("/render")
+async def Render(Render_Data: dict = Body(...)):
+    return {"Settings": Render_Data}

@@ -103,20 +103,24 @@ main {
   display: none;
 }
 
-.Attach_A_File {
+.Attach_A_File,
+.Download_File {
   padding: 2px 6px;
   border: 0.5px solid buttonborder;
   background: buttonface;
   color: buttontext;
   cursor: default;
+  font: inherit;
   user-select: none;
 }
 
-.Attach_A_File:hover {
+.Attach_A_File:hover,
+.Download_File:hover {
   background: #e5e5e5;
 }
 
-.Attach_A_File:active {
+.Attach_A_File:active,
+.Download_File:active {
   background: #dcdcdc;
 }
 
@@ -185,6 +189,16 @@ main {
   padding: 18px;
   box-sizing: border-box;
   overflow-y: auto;
+}
+
+.Rendering_Message {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
 }
 
 .Color_Row {
