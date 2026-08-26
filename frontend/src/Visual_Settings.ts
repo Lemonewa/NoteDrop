@@ -1,12 +1,10 @@
-export type Background_Type = 'Solid' | 'Gradient' | 'Vertical_Stripes' | 'Horizontal_Stripes' | 'Grid'
+export type Background_Type = 'Solid' | 'Vertical_Stripes' | 'Horizontal_Stripes' | 'Grid'
 
 export const Default_Left_White_Note_Color = '#1e88e5'
 export const Default_Right_White_Note_Color = '#43a047'
 export const Default_White_Key_Color = '#ffffff'
 export const Default_Black_Key_Color = '#000000'
 export const Default_Background_Color = '#444444'
-export const Default_Gradient_Top_Color = '#e53935'
-export const Default_Gradient_Bottom_Color = '#fdd835'
 export const Default_Line_Color = '#ffffff'
 export const Default_Line_Thickness = 0.25
 export const Default_Tempo = 1

@@ -92,7 +92,7 @@ main {
 }
 
 .View-2 .Personalization {
-  flex: 2;
+  flex: 1;
 }
 
 .View-3 .Personalization {
@@ -104,7 +104,8 @@ main {
 }
 
 .Attach_A_File,
-.Download_File {
+.Download_File,
+.Cancel_Render {
   padding: 2px 6px;
   border: 0.5px solid buttonborder;
   background: buttonface;
@@ -115,13 +116,20 @@ main {
 }
 
 .Attach_A_File:hover,
-.Download_File:hover {
+.Download_File:hover,
+.Cancel_Render:hover {
   background: #e5e5e5;
 }
 
 .Attach_A_File:active,
-.Download_File:active {
+.Download_File:active,
+.Cancel_Render:active {
   background: #dcdcdc;
+}
+
+.Mute_Preview,
+.Mute_Preview_Active {
+  justify-self: start;
 }
 
 .Personalization {
@@ -153,11 +161,6 @@ main {
   pointer-events: none;
 }
 
-.Preview_Hit_Line {
-  stroke: #333333;
-  stroke-width: 2;
-}
-
 .Preview_Key_White {
   stroke: #9a9a9a;
   stroke-width: 0.6;
@@ -174,10 +177,6 @@ main {
   padding: 8px 12px;
   box-sizing: border-box;
   text-align: center;
-}
-
-.Preview_Note {
-  opacity: 0.9;
 }
 
 .Color_Panel {
@@ -242,22 +241,28 @@ main {
   cursor: pointer;
 }
 
-.Auto_Color_Inactive {
-  height: 26px;
-  padding: 0 8px;
-  border: 1px solid #777777;
-  background: #eeeeee;
-  color: #222222;
-  cursor: pointer;
-}
-
+.Mute_Preview,
+.Mute_Preview_Active,
+.Auto_Color_Inactive,
 .Auto_Color_Active {
   height: 26px;
   padding: 0 8px;
   border: 1px solid #777777;
-  background: #d7e8f7;
   color: #222222;
   cursor: pointer;
+}
+
+.Mute_Preview,
+.Auto_Color_Inactive {
+  background: #eeeeee;
+}
+
+.Auto_Color_Active {
+  background: #d7e8f7;
+}
+
+.Mute_Preview_Active {
+  background: #d7e8f7;
 }
 
 .Select_Input {

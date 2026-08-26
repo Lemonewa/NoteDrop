@@ -1,7 +1,7 @@
 export const Preview_Width = 960
-export const Preview_Height = 420
+export const Preview_Height = 720
 export const Preview_Fall_Time = 4
-export const Preview_Keyboard_Height = 70
+export const Preview_Keyboard_Height = 100
 export const Preview_Hit_Height = Preview_Height - Preview_Keyboard_Height
 export const Preview_Min_Pitch = 21
 export const Preview_Max_Pitch = 108

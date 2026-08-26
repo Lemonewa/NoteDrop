@@ -22,6 +22,10 @@ function Average_Pitch(Notes: Complete_Note[], Track: number) {
   return (Sum / Count)
 }
 
+function Note_Frequency(Pitch: number) {
+  return (440 * Math.pow(2, (Pitch - 69) / 12))
+}
+
 function Color_Boxes(Colors: string[], Set_Color: Color_Setter) {
   const Buttons = []
   for (let iter = 0; iter < Colors.length; iter += 1) {
@@ -58,7 +62,7 @@ function Basic_Color_Row(Title: string, Colors: string[], Color: string, Set_Col
 }
 
 function Auto_Color_Row(Title: string, Color: string, Auto: boolean, Set_Color: Color_Setter, Set_Auto_Color: (() => void)) {
-  let Auto_Color = (Auto ? 'Auto_Color_Active' : 'Auto_Color_Inactive')
+  let Auto_Color = (Auto ? 'Auto_Color_Inactive' : 'Auto_Color_Active')
   return (
     <div className="Color_Row">
       <div className="Color_Title">{Title}</div>
@@ -126,8 +130,6 @@ function App() {
   const [Black_Key_Color, Set_Black_Key_Color] = useState(VS.Default_Black_Key_Color)
   const [Background_Type, Set_Background_Type] = useState<VS.Background_Type>('Solid')
   const [Solid_Color, Set_Solid_Color] = useState(VS.Default_Background_Color)
-  const [Gradient_Top_Color, Set_Gradient_Top_Color] = useState(VS.Default_Gradient_Top_Color)
-  const [Gradient_Bottom_Color, Set_Gradient_Bottom_Color] = useState(VS.Default_Gradient_Bottom_Color)
   const [Stripes_Color, Set_Stripes_Color] = useState(VS.Default_Background_Color)
   const [Vertical_Line_Color, Set_Vertical_Line_Color] = useState(VS.Default_Line_Color)
   const [Horizontal_Line_Color, Set_Horizontal_Line_Color] = useState(VS.Default_Line_Color)
@@ -137,9 +139,15 @@ function App() {
   const [Duration, Set_Duration] = useState(VS.Default_Duration)
   const [Error_Message, Set_Error_Message] = useState('')
   const [Rendering, Set_Rendering] = useState(false)
+  const [Mute, Set_Mute] = useState(false)
+  const [Midi_File, Set_Midi_File] = useState<File | undefined>(undefined)
   
   const Error_Timeout = useRef<number | undefined>(undefined)
   const Frame = useRef<number | undefined>(undefined)
+  const Render_Controller = useRef<AbortController | undefined>(undefined)
+  const Audio_Context = useRef<AudioContext | undefined>(undefined)
+  const Preview_Sounds = useRef<OscillatorNode[]>([])
+  const Muted = useRef(false)
   
   const Preview_Notes: Complete_Note[] = []
   const Tracks: number[] = []
@@ -158,10 +166,7 @@ function App() {
   }
 
   let Preview_Background_Fill = ''
-  if (Background_Type === 'Gradient') {
-    Preview_Background_Fill = 'url(#Preview_Background_Gradient)'
-  }
-  else if (Background_Type === 'Solid') {
+  if (Background_Type === 'Solid') {
     Preview_Background_Fill = Solid_Color
   }
   else {
@@ -196,16 +201,65 @@ function App() {
     View = 'View-3'
   }
 
+  function Play_Preview_Sound(Note: Complete_Note) {
+    if (Muted.current || Audio_Context.current === undefined) {
+      return
+    }
+    const Start_Time = Audio_Context.current.currentTime
+    const Note_End = Math.min(Note[1], Duration)
+    let Sound_Duration = (Note_End - Note[0]) / Tempo
+    let Volume = (Note[3] / 127) * 0.04
+    const End_Time = Start_Time + Sound_Duration
+    const Oscillator = Audio_Context.current.createOscillator()
+    const Gain = Audio_Context.current.createGain()
+    Oscillator.type = 'sine'
+    Oscillator.frequency.setValueAtTime(Note_Frequency(Note[2]), Start_Time)
+    Gain.gain.setValueAtTime(0, Start_Time)
+    Gain.gain.linearRampToValueAtTime(Volume, Start_Time + 0.01)
+    Gain.gain.linearRampToValueAtTime(0, End_Time)
+    Oscillator.connect(Gain)
+    Gain.connect(Audio_Context.current.destination)
+    Oscillator.onended = () => Remove_Preview_Sound(Oscillator)
+    Preview_Sounds.current.push(Oscillator)
+    Oscillator.start(Start_Time)
+    Oscillator.stop(End_Time)
+  }
+
+  function Play_Preview_Sounds(Previous_Time: number, Next_Time: number) {
+    if (Muted.current || Next_Time < Previous_Time || Next_Time < 0) {
+      return
+    }
+    for (let iter = 0; iter < Preview_Notes.length; iter += 1) {
+      if ((Preview_Notes[iter][0] > Previous_Time) && (Preview_Notes[iter][0] <= Next_Time) && (Preview_Notes[iter][0] < Duration)) {
+        Play_Preview_Sound(Preview_Notes[iter])
+      }
+    }
+  }
+
+  function Stop_Preview_Sounds() {
+    for (let iter = 0; iter < Preview_Sounds.current.length; iter += 1) {
+      Preview_Sounds.current[iter].stop()
+    }
+    Preview_Sounds.current = []
+  }
+
   useEffect(() => {
 
     if (Notes.length === 0) {
+      Stop_Preview_Sounds()
       Set_Current_Time(-PL.Preview_Fall_Time)
       return
     }
 
     const Start_Time = performance.now()
+    let Previous_Time = -PL.Preview_Fall_Time
     function Animate(Now: number) {
       const Loop_Time = (((((Now - Start_Time) / 1000) * Tempo) % (Duration + PL.Preview_Fall_Time)) - PL.Preview_Fall_Time)
+      if (Loop_Time < Previous_Time) {
+        Stop_Preview_Sounds()
+      }
+      Play_Preview_Sounds(Previous_Time, Loop_Time)
+      Previous_Time = Loop_Time
       Set_Current_Time(Loop_Time)
       Frame.current = window.requestAnimationFrame(Animate)
     }
@@ -216,9 +270,17 @@ function App() {
       if (Frame.current !== undefined) {
         window.cancelAnimationFrame(Frame.current)
       }
+      Stop_Preview_Sounds()
     })
 
   }, [Notes, Duration, Tempo])
+
+  useEffect(() => {
+    Muted.current = Mute
+    if (Mute) {
+      Stop_Preview_Sounds()
+    }
+  }, [Mute])
 
   function Show_Error(Message: string) {
     Set_Error_Message(Message)
@@ -226,6 +288,34 @@ function App() {
       window.clearTimeout(Error_Timeout.current)
     }
     Error_Timeout.current = window.setTimeout(() => Set_Error_Message(''), 5000)
+  }
+
+  function Start_Preview_Audio() {
+    if (Audio_Context.current === undefined) {
+      Audio_Context.current = new AudioContext()
+    }
+    Audio_Context.current.resume()
+  }
+
+  function Remove_Preview_Sound(Sound: OscillatorNode) {
+    const Sounds = []
+    for (let iter = 0; iter < Preview_Sounds.current.length; iter += 1) {
+      if (Preview_Sounds.current[iter] !== Sound) {
+        Sounds.push(Preview_Sounds.current[iter])
+      }
+    }
+    Preview_Sounds.current = Sounds
+  }
+
+  function Change_Mute() {
+    if (Mute) {
+      Start_Preview_Audio()
+      Set_Mute(false)
+    }
+    else {
+      Stop_Preview_Sounds()
+      Set_Mute(true)
+    }
   }
 
   function Change_Left_White_Note_Color(Color: string) {
@@ -263,8 +353,10 @@ function App() {
   }
 
   function Reset_File(Input: HTMLInputElement) {
+    Stop_Preview_Sounds()
     Set_File_Name('')
     Set_Notes([])
+    Set_Midi_File(undefined)
     Input.value = ''
   }
 
@@ -274,6 +366,9 @@ function App() {
     if (!File) {
       return
     }
+    Stop_Preview_Sounds()
+    Start_Preview_Audio()
+
     const Upload = new FormData()
     Upload.append('file', File)
     const Response = await fetch('/midi/notes', { method: 'POST', body: Upload })
@@ -289,12 +384,25 @@ function App() {
     Set_File_Name(File.name)
     Set_Error_Message('')
     Set_Rendering(false)
+    Set_Midi_File(File)
 
   }
 
   async function Render() {
 
+    if (Midi_File === undefined) {
+      Show_Error('No MIDI File')
+      return
+    }
+
+    if (Rendering) {
+      return
+    }
+
+    const Controller = new AbortController()
+    Render_Controller.current = Controller
     Set_Rendering(true)
+
     const Render_Data = {
       File_Name: File_Name,
       Notes: Notes,
@@ -306,8 +414,6 @@ function App() {
       Black_Key_Color: Black_Key_Color,
       Background_Type: Background_Type,
       Solid_Color: Solid_Color,
-      Gradient_Top_Color: Gradient_Top_Color,
-      Gradient_Bottom_Color: Gradient_Bottom_Color,
       Stripes_Color: Stripes_Color,
       Vertical_Line_Color: Vertical_Line_Color,
       Horizontal_Line_Color: Horizontal_Line_Color,
@@ -316,17 +422,47 @@ function App() {
       Tempo: Tempo,
       Duration: Duration
     }
+    const Render_Request = new FormData()
+    Render_Request.append('settings', JSON.stringify(Render_Data))
+    Render_Request.append('file', Midi_File)
 
     const Response = await fetch('/render', {
       method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify(Render_Data)
+      body: Render_Request,
+      signal: Controller.signal
     })
+
     if (!Response.ok) {
       const Data = await Response.json()
       Show_Error(Data.detail || `Render Failed (${Response.status})`)
+      return
     }
 
+    const Video = await Response.blob()
+    const Download_Url = window.URL.createObjectURL(Video)
+    const Download_Link = document.createElement('a')
+    const Download_Name = File_Name.replace(/\.[^/.]+$/, '') || 'NoteDrop'
+    Download_Link.href = Download_Url
+    Download_Link.download = `${Download_Name}_NoteDrop.mp4`
+    document.body.appendChild(Download_Link)
+    Download_Link.click()
+    Download_Link.remove()
+    window.URL.revokeObjectURL(Download_Url)
+
+    if (Render_Controller.current === Controller) {
+      Render_Controller.current = undefined
+    }
+    Set_Rendering(false)
+
+  }
+
+  function Cancel_Render() {
+    fetch('/render/cancel', { method: 'POST' }).catch(() => {})
+    if (Render_Controller.current !== undefined) {
+      Render_Controller.current.abort()
+      Render_Controller.current = undefined
+    }
+    Set_Rendering(false)
   }
 
   function Is_Left_Hand(Note: Complete_Note) {
@@ -551,17 +687,10 @@ function App() {
               viewBox={`0 0 ${PL.Preview_Width} ${PL.Preview_Height}`}
               preserveAspectRatio="none"
             >
-              <defs>
-                <linearGradient id="Preview_Background_Gradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={Gradient_Top_Color} />
-                  <stop offset="100%" stopColor={Gradient_Bottom_Color} />
-                </linearGradient>
-              </defs>
               <rect className="Preview_Background" x="0" y="0" width={PL.Preview_Width} height={PL.Preview_Height} fill={Preview_Background_Fill} />
               {Vertical_Line}
               {Horizontal_Line}
               {Note}
-              <line className="Preview_Hit_Line" x1="0" y1={PL.Preview_Hit_Height} x2={PL.Preview_Width} y2={PL.Preview_Hit_Height} />
               {White_Key}
               {Black_Key}
             </svg>
@@ -571,6 +700,9 @@ function App() {
               <div className="Rendering_Message">
                 <div>Rendering...</div>
                 <div>Process may take a few minutes.</div>
+                <button className="Cancel_Render" type="button" onClick={Cancel_Render}>
+                  CANCEL
+                </button>
               </div>
             )}
             {(!Rendering) && (
@@ -589,19 +721,12 @@ function App() {
                     onChange={(Input) => Set_Background_Type(Input.target.value as VS.Background_Type)}
                   >
                     <option value="Solid">SOLID</option>
-                    <option value="Gradient">GRADIENT</option>
                     <option value="Vertical_Stripes">VERTICAL STRIPES</option>
                     <option value="Horizontal_Stripes">HORIZONTAL STRIPES</option>
                     <option value="Grid">GRID</option>
                   </select>
                 </div>
                 {(Background_Type === 'Solid') && Basic_Color_Row('BACKGROUND COLOR', VS.Basic_Background_Colors, Solid_Color, Set_Solid_Color)}
-                {(Background_Type === 'Gradient') && (
-                  <>
-                    {Basic_Color_Row('GRADIENT TOP', VS.Basic_Note_Colors, Gradient_Top_Color, Set_Gradient_Top_Color)}
-                    {Basic_Color_Row('GRADIENT BOTTOM', VS.Basic_Note_Colors, Gradient_Bottom_Color, Set_Gradient_Bottom_Color)}
-                  </>
-                )}
                 {((Background_Type === 'Vertical_Stripes') || (Background_Type === 'Horizontal_Stripes') || (Background_Type === 'Grid')) && Basic_Color_Row('BACKGROUND COLOR', VS.Basic_Background_Colors, Stripes_Color, Set_Stripes_Color)}
                 {((Background_Type === 'Vertical_Stripes') || (Background_Type === 'Grid')) && Line_Row('VERTICAL LINE', Vertical_Line_Thickness, Vertical_Line_Color, Set_Vertical_Line_Thickness, Set_Vertical_Line_Color)}
                 {((Background_Type === 'Horizontal_Stripes') || (Background_Type === 'Grid')) && Line_Row('HORIZONTAL LINE', Horizontal_Line_Thickness, Horizontal_Line_Color, Set_Horizontal_Line_Thickness, Set_Horizontal_Line_Color)}
@@ -624,6 +749,12 @@ function App() {
                   >
                     {Duration_Options}
                   </select>
+                </div>
+                <div className="Color_Row">
+                  <div className="Color_Title">SOUND</div>
+                  <button className={(Mute ? 'Mute_Preview_Active' : 'Mute_Preview')} type="button" onClick={Change_Mute}>
+                    {Mute ? 'UNMUTE' : 'MUTE'}
+                  </button>
                 </div>
               </>
             )}
