@@ -187,7 +187,8 @@ main {
   min-height: 0;
   padding: 18px;
   box-sizing: border-box;
-  overflow-y: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .Rendering_Message {
@@ -266,10 +267,13 @@ main {
 }
 
 .Select_Input {
-  min-width: 180px;
+  grid-column: 2/4;
+  width: 100%;
+  min-width: 0;
   height: 28px;
   padding: 0 8px;
   border: 1px solid #777777;
+  box-sizing: border-box;
   background: #ffffff;
 }
 
