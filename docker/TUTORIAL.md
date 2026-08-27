@@ -2,7 +2,9 @@
 
 0. Pobranie repozytorium z GitHuba:
 
-https://github.com/Lemonewa/NoteDrop
+```bash
+git clone https://github.com/Lemonewa/NoteDrop
+```
 
 1. Uruchomienie dockera z glownego katalogu projektu:
 
