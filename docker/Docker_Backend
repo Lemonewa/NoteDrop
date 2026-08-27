@@ -1,0 +1,9 @@
+FROM python:3.11-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y ffmpeg && pip install fastapi uvicorn python-multipart pillow pretty_midi numpy
+
+COPY backend/*.py ./backend/
+
+CMD ["uvicorn", "backend.Main:App", "--host", "0.0.0.0", "--port", "8001"]

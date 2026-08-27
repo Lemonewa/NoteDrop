@@ -1,0 +1,18 @@
+server {
+
+    listen 80;
+    client_max_body_size 100m;
+
+    root /usr/share/nginx/html;
+
+    location /midi {
+        proxy_pass http://backend:8001;
+    }
+
+    location /render {
+        proxy_pass http://backend:8001;
+        proxy_read_timeout 900s;
+        proxy_send_timeout 900s;
+    }
+    
+}
