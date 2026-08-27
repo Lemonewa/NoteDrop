@@ -2,7 +2,7 @@
 
 0. Pobranie repozytorium z GitHuba:
 
-https://github.com/Lemonewa/Spadajace_klawisze
+https://github.com/Lemonewa/NoteDrop
 
 1. Uruchomienie dockera z glownego katalogu projektu:
 
