@@ -623,7 +623,8 @@ function App() {
                 <li>Start with providing a MIDI file (other types are not supported). To do so, click the "ATTACH A FILE" button and browse your files to find the desired one.</li>
                 <li>Then, the "CUSTOMIZATION" panel will show on the right side of the screen. Read its instruction to understand how to use it.</li>
                 <li>If you want to change provided file, click the newly-appeared "CHANGE FILE" button. If you want to hide the tutorial, click "HELP" button once again.</li>
-                <li>When customization is over and you are ready to download the video, click the "DOWNLOAD" button. Process may take a few minutes.</li>
+                <li>When customization is over and you are ready to download the video, click the "DOWNLOAD" button. Process should take a few minutes.</li>
+                <li>Open downloaded file via new tab in your browser - type: "file:///home/[username]/Downloads/[name]_NoteDrop.mp4".</li>
               </ol>
               <p>For further questions feel free to contact me via falling-notes@gmail.com.</p>
             </div>
