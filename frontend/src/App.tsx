@@ -617,19 +617,17 @@ function App() {
           <h1 className="Tutorial_Title">TUTORIAL</h1>
           <div className="Tutorial_Content">
             <div className="Tutorial_Part">
-              <h2>Guide</h2>
-              <p>Welcome to the web MIDI -&gt; MP4 "NoteDrop" converter!</p>
+              <h2>General Guide</h2>
+              <strong>Welcome to the web MIDI to MP4 <em>NoteDrop</em> converter!</strong>
               <ol>
-                <li>Start with providing a MIDI file (other types are not supported). To do so, click the "ATTACH A FILE" button and browse your files to find the desired one.</li>
-                <li>Then, the "CUSTOMIZATION" panel will show on the right side of the screen. Read its instruction to understand how to use it.</li>
-                <li>If you want to change provided file, click the newly-appeared "CHANGE FILE" button. If you want to hide the tutorial, click "HELP" button once again.</li>
-                <li>When customization is over and you are ready to download the video, click the "DOWNLOAD" button. Process should take a few minutes.</li>
-                <li>Open downloaded file via new tab in your browser - type: "file:///home/[username]/Downloads/[name]_NoteDrop.mp4".</li>
+                <li>Start with providing a MIDI file (other types are not supported). To do so, click the <code>ATTACH A FILE</code> button and browse your files to find the desired one.</li>
+                <li>Then, the <em>Personalization</em> panel will show on the right side of the screen. Read its instruction to understand how to use it.</li>
+                <li>If you want to change provided file, click the newly-appeared <code>CHANGE FILE</code> button. If you want to hide the tutorial, click <code>HELP</code> button once again.</li>
+                <li>When customization is over and you are ready to download the video, click the <code>DOWNLOAD</code> button. Process should take a few minutes.</li>
               </ol>
-              <p>For further questions feel free to contact me via falling-notes@gmail.com.</p>
             </div>
             <div className="Tutorial_Part">
-              <h2>Personalization</h2>
+              <h2>Personalization Panel</h2>
               <ol>
                 <li>
                   <strong>Falling Notes</strong>
@@ -638,7 +636,7 @@ function App() {
                     left-hand falling white notes, left-hand falling black notes, right-hand falling white notes, right-hand falling black notes.
                   </p>
                   <p>Select desired one from the easy-access color panel or directly, by clicking on the color box at the right end of the row.</p>
-                  <p>By default, color of the falling black notes assigned to L/R hand is matched as darker tone of the color chosen for corresponding white notes. This setting will get off when you manually select a color for any of falling black notes. You may turn it on again by clicking "AUTO" button assigned to desired hand.</p>
+                  <p>By default, color of the falling black notes assigned to L/R hand is matched as darker tone of the color chosen for corresponding white notes. This setting will get off when you manually select a color for any of falling black notes. You may turn it on again by clicking <code>AUTO</code> button assigned to desired hand.</p>
                 </li>
                 <li>
                   <strong>Keyboard</strong>
