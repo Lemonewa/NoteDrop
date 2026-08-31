@@ -165,12 +165,12 @@ def Background(Settings):
     if (Settings.Background_Type == "Vertical_Stripes" or Settings.Background_Type == "Grid"):
         for iter in range(len(Preview_White_Key_Pitches) + 1):
             x = iter * Preview_White_Key_Width
-            Draw.line([(x, 0), (x, Preview_Hit_Height)], fill=Settings.Vertical_Line_Color, width=Settings.Vertical_Line_Thickness)
+            Draw.line([(x, 0), (x, Preview_Hit_Height)], fill=Settings.Vertical_Line_Color, width=int(Settings.Vertical_Line_Thickness))
     if (Settings.Background_Type == "Horizontal_Stripes" or Settings.Background_Type == "Grid"):
         Line_Count = math.ceil(Preview_Hit_Height / Preview_White_Key_Width)
         for iter in range(Line_Count + 1):
             y = iter * Preview_White_Key_Width
-            Draw.line([(0, y), (Preview_Width, y)], fill=Settings.Horizontal_Line_Color, width=Settings.Horizontal_Line_Thickness)
+            Draw.line([(0, y), (Preview_Width, y)], fill=Settings.Horizontal_Line_Color, width=int(Settings.Horizontal_Line_Thickness))
     return Background_Image
 
 def Tracks(Notes):
