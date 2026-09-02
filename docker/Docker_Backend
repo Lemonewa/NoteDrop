@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y ffmpeg && pip install fastapi uvicorn python-multipart pillow pretty_midi numpy
+RUN apt-get update && apt-get install -y ffmpeg fluidsynth fluid-soundfont-gm && pip install fastapi uvicorn python-multipart pillow pretty_midi numpy pyfluidsynth
 
 COPY backend/*.py ./backend/
 

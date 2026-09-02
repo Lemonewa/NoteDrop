@@ -61,7 +61,7 @@ def Synced_Wav(Midi_File, Duration, Tempo, Fall_Time, Render_Time):
             New_Instrument.notes.append(New_Note)
         New_Midi.instruments.append(New_Instrument)
 
-    Audio = New_Midi.synthesize(fs=Sample_Rate)
+    Audio = New_Midi.fluidsynth(fs=Sample_Rate)
     if (Audio.size < Sample_Count):
         Audio = numpy.pad(Audio, (0, Sample_Count - Audio.size))
     elif (Audio.size > Sample_Count):
