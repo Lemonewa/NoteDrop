@@ -624,6 +624,7 @@ function App() {
                 <li>Then, the <em>Personalization</em> panel will show on the right side of the screen. Read its instruction to understand how to use it.</li>
                 <li>If you want to change provided file, click the newly-appeared <code>CHANGE FILE</code> button. If you want to hide the tutorial, click <code>HELP</code> button once again.</li>
                 <li>When customization is over and you are ready to download the video, click the <code>DOWNLOAD</code> button. Process should take a few minutes.</li>
+                <li>Please have in mind that the final sound is piano-like and differs from the basic preview sound.</li>
               </ol>
             </div>
             <div className="Tutorial_Part">
